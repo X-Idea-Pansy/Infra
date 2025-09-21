@@ -3,6 +3,13 @@
     pkg:
       - openmediavault-k8s
       - openmediavault-clamav
+      - openmediavault-sharerootfs
+
+- name: Set machine hostname
+  ansible.builtin.copy:
+    content: "{{ inventory_hostname }}\n"
+    dest: /etc/hostname
+    force: yes
 
 # HTTPS configuration
 - name: SSL configuration
@@ -45,6 +52,13 @@
         owner: root
         mode: "0644"
 
+    - name: Generate intermediary SSL certificate chain
+      ansible.builtin.copy:
+        dest: /etc/ssl/certs/omv-intermediary-chain.crt
+        content: "{{ ssl_intermediary_cert }}{{ ca_cert }}"
+        owner: root
+        mode: "0644"
+
     - name: Copy update script
       ansible.builtin.copy:
         src: ./files/omv-ssl-update-certs.sh
@@ -52,7 +66,31 @@
         owner: root
         mode: "0755"
 
-    - name: Update SSL certs
+    - name: Copy nginx SSL cert script setter
+      ansible.builtin.copy:
+        src: ./files/omv-set-nginx-ssl-cert.sh
+        dest: /usr/local/bin/omv-set-nginx-ssl-cert
+        owner: root
+        mode: "0755"
+
+    - name: Add leaf SSL cert to OMV database
       ansible.builtin.command:
         argv:
           - omv-ssl-update-certs
+          - "757f842e-faf0-11e8-a284-3a6331353066"
+          - "/etc/ssl/certs/omv-chain.crt"
+          - "/etc/ssl/private/omv.key"
+
+    - name: Add intermediary SSL cert to OMV database
+      ansible.builtin.command:
+        argv:
+          - omv-ssl-update-certs
+          - "657f842e-faf0-11e8-a284-3a6331353067"
+          - "/etc/ssl/certs/omv-intermediary-chain.crt"
+          - "/etc/ssl/private/omv-intermediary.key"
+
+    - name: Set nginx to use leaf SSL cert
+      ansible.builtin.command:
+        argv:
+          - omv-set-nginx-ssl-cert
+          - "757f842e-faf0-11e8-a284-3a6331353066"

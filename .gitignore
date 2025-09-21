@@ -1,1 +1,4 @@
 .virtual_env
+.ansible
+.vscode
+inventory.yml

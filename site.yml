@@ -1,0 +1,6 @@
+- name: LAN servers
+  hosts: lan_servers
+  become: true
+  roles:
+    - common
+    - omv

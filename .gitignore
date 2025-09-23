@@ -1,4 +1,5 @@
 .virtual_env
 .ansible
 .vscode
+*.secret
 inventory.yml

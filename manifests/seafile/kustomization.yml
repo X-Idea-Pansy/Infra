@@ -1,0 +1,34 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+secretGenerator:
+  - name: seafile-secrets
+    namespace: seafile
+    env: seafile.secret
+
+resources:
+  - certificate-seafile.yml
+  - deploy-mariadb.yml
+  - deploy-memcached.yml
+  - deploy-seafile.yml
+  - ingressroute-seafile.yml
+  - ns-seafile.yml
+  - pvc-mariadb-data.yml
+  - pvc-seafile.yml
+  - svc-mariadb.yml
+  - svc-memcached.yml
+  - svc-seafile.yml
+
+images:
+  - name: mariadb
+    newName: mariadb
+    newTag: "10.11"
+  - name: memcached
+    newName: memcached
+    newTag: "1.6.18"
+  - name: seafile
+    newName: seafileltd/seafile-mc
+    newTag: "12.0.11"

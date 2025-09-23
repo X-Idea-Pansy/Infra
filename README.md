@@ -20,3 +20,17 @@ Run Playbook
 ```shell
 ansible-playbook -i inventory.yml site.yml --ask-become-pass
 ```
+
+First deployment only
+
+On server, execute 
+
+```
+kubectl apply -f /etc/ssl/private/ca-omv-cluster.yml
+```
+
+Kubectl
+```
+kubectl apply -k ./manifests/
+```
+

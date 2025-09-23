@@ -94,3 +94,11 @@
         argv:
           - omv-set-nginx-ssl-cert
           - "757f842e-faf0-11e8-a284-3a6331353066"
+
+    - name: Generate kube CA secret manifest
+      ansible.builtin.template:
+        src: templates/ca-omv-cluster.yml.j2
+        dest: /etc/ssl/private/ca-omv-cluster.yml
+        mode: "0600"
+        owner: root
+        group: root

@@ -31,12 +31,22 @@ spec:
                   key: MARIA_ROOT_PASSWORD
             - name: MARIADB_AUTO_UPGRADE
               value: "true"
+            - name: MARIADB_USER
+              value: seafile
+            - name: MARIADB_PASSWORD_FILE
+              value: /var/run/secrets/seafile_password
           ports:
             - containerPort: 3306
           volumeMounts:
             - name: mariadb-data
               mountPath: /var/lib/mysql
+            - name: seafile-secrets
+              mountPath: /var/run/secrets/seafile_password
+              subPath: SEAFILE_DB_PASSWORD
       volumes:
         - name: mariadb-data
           persistentVolumeClaim:
             claimName: mariadb-data
+        - name: seafile-secrets
+          secret:
+            secretName: seafile-secrets

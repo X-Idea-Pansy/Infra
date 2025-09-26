@@ -12,7 +12,7 @@ secretGenerator:
 resources:
   - certificate-seafile.yml
   - deploy-mariadb.yml
-  - deploy-memcached.yml
+  - deploy-redis.yml
   - deploy-seafile.yml
   - ingressroute-seafile.yml
   - ns-seafile.yml
@@ -21,14 +21,15 @@ resources:
   - svc-mariadb.yml
   - svc-memcached.yml
   - svc-seafile.yml
+  - svc-redis.yml
 
 images:
   - name: mariadb
     newName: mariadb
     newTag: "10.11"
-  - name: memcached
-    newName: memcached
-    newTag: "1.6.18"
   - name: seafile
     newName: seafileltd/seafile-mc
-    newTag: "12.0.11"
+    newTag: "13.0.11"
+  - name: redis
+    newName: redis
+    newTag: "8.2.1-alpine"
